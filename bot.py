@@ -2,7 +2,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ApplicationBuilder, CallbackQueryHandler, CommandHandler, ContextTypes
 import json, os
 
-TOKEN = "8231541683:AAG-ovgwaEqbb1eLHtiK9Xo7yTZZlzgw8TU"
+TOKEN = os.getenv("BOT_TOKEN")
 
 TASKS = [
     "45 min workout",
@@ -145,8 +145,8 @@ async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("\n".join(lines))
 
 def main():
-    if TOKEN == "PASTE_YOUR_TOKEN_HERE":
-        raise RuntimeError("Please paste your real Telegram bot token into TOKEN.")
+    if not TOKEN:
+    raise RuntimeError("BOT_TOKEN environment variable not set")
 
     app = ApplicationBuilder().token(TOKEN).build()
 
