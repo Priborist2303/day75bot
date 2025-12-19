@@ -144,6 +144,23 @@ async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text("\n".join(lines))
 
+async def reset(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    data = load_data()
+    user_id = str(update.effective_user.id)
+
+    if user_id in data:
+        data[user_id] = {
+            "day": 1,
+            "tasks": [False] * len(TASKS),
+            "note": "",
+            "notes": {}
+        }
+        save_data(data)
+        await update.message.reply_text("🔄 Progress reset. Back to DAY 1.")
+    else:
+        await update.message.reply_text("Already at DAY 1.")
+
+
 def main():
     if not TOKEN:
        raise RuntimeError("BOT_TOKEN environment variable not set")
@@ -151,7 +168,8 @@ def main():
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("note", add_note))
-    app.add_handler(CommandHandler("status", status))    
+    app.add_handler(CommandHandler("status", status))
+    app.add_handler(CommandHandler("reset", reset))    
     app.add_handler(CallbackQueryHandler(toggle))
 
     app.run_polling()
