@@ -146,8 +146,7 @@ async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def main():
     if not TOKEN:
-    raise RuntimeError("BOT_TOKEN environment variable not set")
-
+       raise RuntimeError("BOT_TOKEN environment variable not set")
     app = ApplicationBuilder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
